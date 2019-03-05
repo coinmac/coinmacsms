@@ -1,0 +1,28 @@
+#datatable_filter input{
+    width: 70% !important;
+}
+
+.slideimg{
+    width: 100% !important;
+    height: auto !important;
+}
+
+a.nav-link{
+    color: white !important;
+    opacity: 0 !important;
+}
+
+.logo{
+    
+    width: 120px;
+    height: auto;
+    float: left;
+    margin-bottom: -50px;
+    position: relative;
+    border: 4px solid darkgreen;
+    
+}
+.logo img{
+width: 100%;
+height: auto;
+}
