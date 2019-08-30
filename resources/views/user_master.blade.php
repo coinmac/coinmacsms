@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="/css/mystyles.css">
 </head>
 
-<style>.nav-link{color: white !important; width:auto; </style>
+<style>
+    .nav-link a{color: white !important; width:auto; 
+    </style>
 <body>
     
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:navy;">
@@ -20,7 +22,7 @@
         
         </button>
         <div class="collapse navbar-collapse" id="collapsibleNavId">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0" style="color: white !important;">
                 <li class="nav-item active">
                     <a class="nav-link" href="{{route('sendmessage.index')}}">Send SMS <span class="sr-only">(current)</span></a>
                 </li>

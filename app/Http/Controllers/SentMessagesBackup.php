@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Sentmessage;
 use App\Phonegroup;
 use App\Phonebook;
@@ -127,18 +129,16 @@ class SentmessageController extends Controller
             // multi handle
             $mh = curl_multi_init();
             
-            if(count($phonenumbers) > 25){               
-                foreach(array_chunk($phonenumbers,25) as $nochunks){
-                    $recipient = "";    
+            if(count($phonenumbers) > 25){  
+                $recipient = "";
+                foreach(array_chunk($phonenumbers,25) as $i => $nochunks){
+                        
                     foreach($nochunks as $key => $recip){
                         $recipient2 = sanitizeRecipient($recip);
-
-                        if (end(array_keys($nochunks)) == $key)
-                        {
-                            $recipient.=$recipient2;
-                        }else{
+                        
+                       
                             $recipient.=$recipient2.",";
-                        }
+                       
                         // At the last iteration, a string of 25 recipients will be generated
                     }
                     $fetchURL = $link."&destination=".$recipient;
@@ -150,23 +150,23 @@ class SentmessageController extends Controller
                 };
 
             }else{
-                foreach($phonenumbers as $key => $recip){
-                    $recipient2 = sanitizeRecipient($recip);
+                $recipient = "";  
+                foreach($phonenumbers as $i => $recip){
+                    $recipient = sanitizeRecipient($recip);
 
-                    if (end(array_keys($nochunks)) == $key){
-                        $recipient.=$recipient2;
-                    }else{
-                        $recipient.=$recipient2.",";
-                    }
+                    
+                        
+                    
                     // At the last iteration, a string of 25 recipients will be generated
+                    $fetchURL = $link."&destination=".$recipient;
+                    $multiCurl[$i] = curl_init();
+                    curl_setopt($multiCurl[$i], CURLOPT_URL,$fetchURL);
+                    curl_setopt($multiCurl[$i], CURLOPT_HEADER,0);
+                    curl_setopt($multiCurl[$i], CURLOPT_RETURNTRANSFER,1);
+                    curl_multi_add_handle($mh, $multiCurl[$i]);
                 }
                
-                $fetchURL = $link."&destination=".$recipient;
-                $multiCurl[$i] = curl_init();
-                curl_setopt($multiCurl[$i], CURLOPT_URL,$fetchURL);
-                curl_setopt($multiCurl[$i], CURLOPT_HEADER,0);
-                curl_setopt($multiCurl[$i], CURLOPT_RETURNTRANSFER,1);
-                curl_multi_add_handle($mh, $multiCurl[$i]);
+                
             }
             
 
