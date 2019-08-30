@@ -286,14 +286,14 @@ class SentmessageController extends Controller
     }
 
     public function recipients($messageid){
-            $recipients = Sentmessage::where('messageid','=',$messageid)->first()
+            $recipients = Sentmessage::where('messageid','=',$messageid)->first();
             
             return view('posts.recipients',['recipients'=>$recipients]);
         
     }
 
     public function status($messageid){
-            $status = Sentmessage::where('messageid','=',$messageid)->first()
+            $status = Sentmessage::where('messageid','=',$messageid)->first();
             
             return view('posts.status',['status'=>$status]);
         
