@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="/css/datatables.css">
     <link rel="stylesheet" href="/css/mystyles.css">
 </head>
+
+<style>.nav-link{color: white !important; </style>
 <body>
     
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:navy;">
