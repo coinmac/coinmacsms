@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Sentmessage;
 use App\Phonegroup;
 use App\Phonebook;
