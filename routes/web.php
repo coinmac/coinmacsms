@@ -41,3 +41,15 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('getgroupnos/{id}', 'SentmessageController@getgroupnos');
 Route::get('sentmessages', 'SentmessageController@sentmessages');
+
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('cache:clear');    
+});
+
+Route::get('/clear-route', function() {
+    $exitCode = Artisan::call('route:clear');    
+});
+
+Route::get('/migration', function() {
+    $exitCode = Artisan::call('migrate');    
+});
