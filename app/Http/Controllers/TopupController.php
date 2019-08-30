@@ -18,7 +18,7 @@ class TopupController extends Controller
      */
     public function index()
     {
-        if (auth()->user()->username="smsadmin") {
+        if (auth()->user()->username=="smsadmin") {
             $topups = Topup::all();
             return view('posts.topup',['topups'=>$topups]);
         }else {
@@ -51,7 +51,7 @@ class TopupController extends Controller
             'namepaid' => 'required|max:40',
             'paycode' => 'required|min:4'            
         ]);
-       $units = $request->amount/2;
+       $units = $request->amount/2.5;
         Topup::create([
             'units'=>$units,
             'amount'=>$request->amount,

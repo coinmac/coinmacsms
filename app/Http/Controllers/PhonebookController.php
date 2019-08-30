@@ -20,7 +20,7 @@ class PhonebookController extends Controller
     public function index()
     {
         
-        if (auth()->user()->username="smsadmin") {
+        if (auth()->user()->username=="smsadmin") {
             $contacts = Phonebook::all();
             $groups = Phonegroup::all();
             return view('posts.phonebook',['contacts'=>$contacts,'groups'=>$groups]);

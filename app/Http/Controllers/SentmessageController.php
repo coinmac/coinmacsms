@@ -155,7 +155,7 @@ class SentmessageController extends Controller
                 foreach($phonenumbers as $key => $recip){
                     $recipient2 = sanitizeRecipient($recip);
 
-                    if (end(array_keys($nochunks)) == $key)
+                    if (end(array_keys($nochunks)) == $key){
                         $recipient.=$recipient2;
                     }else{
                         $recipient.=$recipient2.",";
