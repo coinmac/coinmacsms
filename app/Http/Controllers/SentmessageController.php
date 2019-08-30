@@ -68,19 +68,7 @@ class SentmessageController extends Controller
         ]);
        $messageid = strtoupper(auth()->user()->id).substr(md5(uniqid(mt_rand(), true).microtime(true)),0, 8);
 
-        Sentmessage::create([
-            'title'=>$request->senderid,
-            'recipient'=>$request->recipient,
-            'message'=>$request->message,            
-            'messageid'=>$messageid,
-            'scheduled'=>$request->schedule,
-            'scheduletime'=>$request->scheduledate.":".$request->scheduletime,
-            'status' =>'',
-            'username'=>auth()->user()->username,
-            'group'=>$request->group
-        ]);
-        
-        $parameters = [
+       $parameters = [
             'type'=>$request->type,
             'messageid'=>$messageid,            
             'source'=>$request->senderid,
@@ -140,6 +128,51 @@ class SentmessageController extends Controller
             $result = array();
             // multi handle
             $mh = curl_multi_init();
+            
+            if(count($phonenumbers) > 25){               
+                foreach(array_chunk($phonenumbers,25) as $nochunks){
+                    $recipient = "";    
+                    foreach($nochunks as $key => $recip){
+                        $recipient2 = sanitizeRecipient($recip);
+
+                        if (end(array_keys($nochunks)) == $key)
+                        {
+                            $recipient.=$recipient2;
+                        }else{
+                            $recipient.=$recipient2.",";
+                        }
+                        // At the last iteration, a string of 25 recipients will be generated
+                    }
+                    $fetchURL = $link."&destination=".$recipient;
+                    $multiCurl[$i] = curl_init();
+                    curl_setopt($multiCurl[$i], CURLOPT_URL,$fetchURL);
+                    curl_setopt($multiCurl[$i], CURLOPT_HEADER,0);
+                    curl_setopt($multiCurl[$i], CURLOPT_RETURNTRANSFER,1);
+                    curl_multi_add_handle($mh, $multiCurl[$i]);
+                };
+
+            }else{
+                foreach($phonenumbers as $key => $recip){
+                    $recipient2 = sanitizeRecipient($recip);
+
+                    if (end(array_keys($nochunks)) == $key)
+                        $recipient.=$recipient2;
+                    }else{
+                        $recipient.=$recipient2.",";
+                    }
+                    // At the last iteration, a string of 25 recipients will be generated
+                }
+               
+                $fetchURL = $link."&destination=".$recipient;
+                $multiCurl[$i] = curl_init();
+                curl_setopt($multiCurl[$i], CURLOPT_URL,$fetchURL);
+                curl_setopt($multiCurl[$i], CURLOPT_HEADER,0);
+                curl_setopt($multiCurl[$i], CURLOPT_RETURNTRANSFER,1);
+                curl_multi_add_handle($mh, $multiCurl[$i]);
+            }
+            
+
+            /*
             foreach ($phonenumbers as $i => $recipient) {
                 $recipient = sanitizeRecipient($recipient);
             // URL from which data will be fetched
@@ -150,6 +183,7 @@ class SentmessageController extends Controller
             curl_setopt($multiCurl[$i], CURLOPT_RETURNTRANSFER,1);
             curl_multi_add_handle($mh, $multiCurl[$i]);
             }
+            */
             $index=null;
             do {
             curl_multi_exec($mh,$index);
@@ -161,6 +195,20 @@ class SentmessageController extends Controller
             }
             // close
             curl_multi_close($mh);
+
+            $status =  '<pre>'.var_dump($result).'</pre>';
+
+            Sentmessage::create([
+                'title'=>$request->senderid,
+                'recipient'=>$request->recipient,
+                'message'=>$request->message,            
+                'messageid'=>$messageid,
+                'scheduled'=>$request->schedule,
+                'scheduletime'=>$request->scheduledate.":".$request->scheduletime,
+                'status' =>$status,
+                'username'=>auth()->user()->username,
+                'group'=>$request->group
+            ]);
 
         session()->flash('message','Your Message with the title: '.$request->senderid.', Total Units Deducted: '.$totalunit.' has been sent successfully!');
         return redirect()->back();
@@ -228,12 +276,26 @@ class SentmessageController extends Controller
 
     public function sentmessages(Sentmessage $sentmessage){
         if (auth()->user()->username=="smsadmin") {
-            $sentmessage = Sentmessage::all();
+            $sentmessage = Sentmessage::orderBy('created_at', 'desc')->get();
             return view('posts.sentmessages',['messages'=>$sentmessage]);
         }else {
-            $sentmessage = Sentmessage::where('username',auth()->user()->username)->get();
+            $sentmessage = Sentmessage::where('username',auth()->user()->username)->orderBy('created_at', 'desc')->get();
             return view('posts.sentmessages',['messages'=>$sentmessage]);
         }
+        
+    }
+
+    public function recipients($messageid){
+            $recipients = Sentmessage::where('messageid','=',$messageid)->first()
+            
+            return view('posts.recipients',['recipients'=>$recipients]);
+        
+    }
+
+    public function status($messageid){
+            $status = Sentmessage::where('messageid','=',$messageid)->first()
+            
+            return view('posts.status',['status'=>$status]);
         
     }
 }

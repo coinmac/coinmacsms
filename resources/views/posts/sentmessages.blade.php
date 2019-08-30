@@ -33,7 +33,7 @@
                             @auth
                                 <div class="btn-group" role="group" aria-label="Button group">
                                     <a href="{{url('recipients',$message->messageid)}}" class="btn btn-primary btn-sm">Recipients</a>
-                                    <a href="{{url('resend',$message->messageid)}}" class="btn btn-success btn-sm">Resend</a>
+                                    <a href="{{url('resend',$message->messageid)}}" class="btn btn-success btn-sm">Status</a>
                                 </div>  
                             @endauth
                         </td>
