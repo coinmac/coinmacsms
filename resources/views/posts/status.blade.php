@@ -11,7 +11,7 @@
                 </div>            
             @endif
 
-            <p><b>Title:</b><br>{{$status->title}}</p>
+            <p><b>Title:</b> {{$status->title}}</p>
             <p><b>Body:</b><br>{{$status->message}}</p>
             <p><b>Delivery Report(s):<br></b>
                 @php
