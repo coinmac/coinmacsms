@@ -42,6 +42,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('getgroupnos/{id}', 'SentmessageController@getgroupnos');
 Route::get('sentmessages', 'SentmessageController@sentmessages');
 
+Route::get('/status/{messageid}', 'SentmessageController@status');
+
+Route::get('/recipients/{messageid}', 'SentmessageController@recipients');
+
 Route::get('/clear-cache', function() {
     $exitCode = Artisan::call('cache:clear');    
 });

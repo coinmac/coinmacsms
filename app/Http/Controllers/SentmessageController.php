@@ -152,23 +152,19 @@ class SentmessageController extends Controller
                 };
 
             }else{
-                foreach($phonenumbers as $key => $recip){
-                    $recipient2 = sanitizeRecipient($recip);
-
-                    if (end(array_keys($nochunks)) == $key){
-                        $recipient.=$recipient2;
-                    }else{
-                        $recipient.=$recipient2.",";
-                    }
+                foreach($phonenumbers as $i => $recip){
+                    $recipient = sanitizeRecipient($recip);
+                    
                     // At the last iteration, a string of 25 recipients will be generated
+                    $fetchURL = $link."&destination=".$recipient;
+                    $multiCurl[$i] = curl_init();
+                    curl_setopt($multiCurl[$i], CURLOPT_URL,$fetchURL);
+                    curl_setopt($multiCurl[$i], CURLOPT_HEADER,0);
+                    curl_setopt($multiCurl[$i], CURLOPT_RETURNTRANSFER,1);
+                    curl_multi_add_handle($mh, $multiCurl[$i]);
                 }
                
-                $fetchURL = $link."&destination=".$recipient;
-                $multiCurl[$i] = curl_init();
-                curl_setopt($multiCurl[$i], CURLOPT_URL,$fetchURL);
-                curl_setopt($multiCurl[$i], CURLOPT_HEADER,0);
-                curl_setopt($multiCurl[$i], CURLOPT_RETURNTRANSFER,1);
-                curl_multi_add_handle($mh, $multiCurl[$i]);
+                
             }
             
 
@@ -196,7 +192,7 @@ class SentmessageController extends Controller
             // close
             curl_multi_close($mh);
 
-            $status =  '<pre>'.var_dump($result).'</pre>';
+            $status =  serialize($result);
 
             Sentmessage::create([
                 'title'=>$request->senderid,
@@ -286,14 +282,14 @@ class SentmessageController extends Controller
     }
 
     public function recipients($messageid){
-            $recipients = Sentmessage::where('messageid','=',$messageid)->first()
+            $recipients = Sentmessage::where('messageid','=',$messageid)->first();
             
             return view('posts.recipients',['recipients'=>$recipients]);
         
     }
 
     public function status($messageid){
-            $status = Sentmessage::where('messageid','=',$messageid)->first()
+            $status = Sentmessage::where('messageid','=',$messageid)->first();
             
             return view('posts.status',['status'=>$status]);
         
