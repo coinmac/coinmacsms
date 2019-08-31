@@ -15,22 +15,23 @@
             <p><b>Body:</b><br>{{$status->message}}</p>
             <p><b>Delivery Report(s):<br></b>
                 @php
-                    $results = unserialize($status->status);
-                    foreach ($results as $res){
-                        $oneres = explode("|",$res);
+                    if(($status->status!=""){
+                        $results = unserialize($status->status);
+                        foreach ($results as $res){
+                            $oneres = explode("|",$res);
 
-                        if($oneres[0]=="1701"){
-                            echo $oneres[1]." - Delivered";
-                        }elseif($oneres[0]=="1032"){
-                            echo $oneres[1]." - Number on DND";
-                        }elseif($oneres[0]=="1706"){
-                            echo $oneres[1]." - Invalid Destination";
-                        }else{
-                            echo $oneres[1]." - Unknown Error!";
+                            if($oneres[0]=="1701"){
+                                echo $oneres[1]." - Delivered";
+                            }elseif($oneres[0]=="1032"){
+                                echo $oneres[1]." - Number on DND";
+                            }elseif($oneres[0]=="1706"){
+                                echo $oneres[1]." - Invalid Destination";
+                            }else{
+                                echo $oneres[1]." - Unknown Error!";
+                            }
+                            echo "<hr>";
                         }
-                        echo "<hr>";
                     }
-                        
                     
                 @endphp
             </p>
