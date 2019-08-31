@@ -15,7 +15,7 @@
             <p><b>Body:</b><br>{{$status->message}}</p>
             <p><b>Delivery Report(s):<br></b>
                 @php
-                    if(($status->status!=""){
+                    if($status->status!=""){
                         $results = unserialize($status->status);
                         foreach ($results as $res){
                             $oneres = explode("|",$res);
