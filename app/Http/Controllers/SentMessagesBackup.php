@@ -30,7 +30,7 @@ class SentmessageController extends Controller
      */
     public function index()
     {
-        if (auth()->user()->username=="smsadmin") {
+        if (auth()->user()->username=="info@coinmac.com.ng") {
             $groups = Phonegroup::all();
             $contacts = Phonebook::all();
             return view('posts.sendmessage',['groups'=>$groups,'contacts'=>$contacts]);
@@ -273,7 +273,7 @@ class SentmessageController extends Controller
     }
 
     public function sentmessages(Sentmessage $sentmessage){
-        if (auth()->user()->username=="smsadmin") {
+        if (auth()->user()->username=="info@coinmac.com.ng") {
             $sentmessage = Sentmessage::orderBy('created_at', 'desc')->get();
             return view('posts.sentmessages',['messages'=>$sentmessage]);
         }else {
