@@ -273,6 +273,7 @@ class SentmessageController extends Controller
     public function sentmessages(Sentmessage $sentmessage){
         if (auth()->user()->username=="smsadmin") {
             $sentmessage = Sentmessage::orderBy('created_at', 'desc')->get();
+            
             return view('posts.sentmessages',['messages'=>$sentmessage]);
         }else {
             $sentmessage = Sentmessage::where('username',auth()->user()->username)->orderBy('created_at', 'desc')->get();
