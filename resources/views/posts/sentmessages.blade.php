@@ -16,6 +16,7 @@
         <table class="table table-light" id="datatable">
                 <thead class="thead-light" style="font-size: 0.8em">
                     <tr>
+                        <th>SN</th>
                         <th>Title</th>
                         <th>Message</th>
                         <th>Date Sent</th>
@@ -26,6 +27,7 @@
                 <tbody>
                 @foreach ($messages as $message)  
                     <tr>
+                        <td>{{ $message->id}}</td>
                         <td>{{ $message->title }}</td>
                         <td>{{ $message->message }}</td>
                         <td>{{ $message->created_at }}</td>
@@ -42,6 +44,7 @@
                 </tbody>
                 <tfoot class="thead-light">
                     <tr>
+                        <th>SN</th>
                         <th>Title</th>
                         <th>Message</th>
                         <th>Date Sent</th>
